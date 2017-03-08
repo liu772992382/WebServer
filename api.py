@@ -70,7 +70,6 @@ tasks = [
         'done': False
     }
 ]
-
 @app.route('/todo/api/v1.0/tasks', methods=['GET'])
 @auth.login_required
 def get_tasks():
