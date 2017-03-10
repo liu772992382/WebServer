@@ -9,10 +9,71 @@ from flask import Flask, request, render_template, redirect,make_response, abort
 from datetime import datetime
 from model import *
 import time
-from flask.ext.httpauth import HTTPBasicAuth
+from flask_httpauth import HTTPBasicAuth
+from collections import OrderedDict
+from flask_restful import Resource, Api, reqparse, fields, marshal_with
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
+api = Api(app)
+
+# parser = reqparse.RequestParser()
+# parser.add_argument('rate', type=int, help='Rate to charge for this resource')
+# args = parser.parse_args()
+
+TODOS = {
+    'todo1': {'task': 'build an API'},
+    'todo2': {'task': '?????'},
+    'todo3': {'task': 'profit!'},
+}
+
+
+def abort_if_todo_doesnt_exist(aid):
+    if aid not in TODOS:
+        abort(404, message="Todo {} doesn't exist".format(aid))
+
+parser = reqparse.RequestParser()
+parser.add_argument('task', type=str)
+
+
+# Todo
+#   show a single todo item and lets you delete them
+class ActivityApi(Resource):
+    def get(self, aid):
+        abort_if_todo_doesnt_exist(aid)
+        return TODOS[aid]
+
+    def delete(self, aid):
+        abort_if_todo_doesnt_exist(aid)
+        del TODOS[aid]
+        return '', 204
+
+    def put(self, aid):
+        args = parser.parse_args()
+        task = {'task': args['task']}
+        TODOS[aid] = task
+        return task, 201
+
+
+# TodoList
+#   shows a list of all todos, and lets you POST to add new tasks
+class ActivityList(Resource):
+    def get(self):
+        return TODOS
+
+    def post(self):
+        args = parser.parse_args()
+        aid = int(max(TODOS.keys()).lstrip('todo')) + 1
+        aid = 'todo%i' % aid
+        TODOS[aid] = {'task': args['task']}
+        return TODOS[aid], 201
+
+##
+## Actually setup the Api resource routing here
+##
+api.add_resource(TodoList, '/todos')
+api.add_resource(Todo, '/todos/<todo_id>')
+
 
 @auth.get_password
 def get_password(username):
@@ -33,58 +94,22 @@ def hashimage(upfile):
     upfile.save(os.path.join(UPLOAD_FOLDER, c))
     return c
 
-#登陆验证及获取时间函数
-#-------------------------------------------------------------------------------
-# def login_required(func):
-#     @wraps(func)
-#     def wrapper(*args, **kwargs):
-#         if 'username' not in session:
-#             return redirect('/shanyi/login')
-#         return func(*args, **kwargs)
-#     return wrapper
+tmp = {}
 
 def get_time():
 	return time.strftime("%Y-%m-%d %X", time.localtime())
 
+# class UserApi(Resource):
+#     def get(self, uid):
+#         return {uid: tmp[uid]}
+#
+#     def put(self, uid):
+#         tmp[uid] = request.form['data']
+#         return {uid: tmp[uid]}
+#
+# api.add_resource(UserApi, '/shanyi/user/<string:uid>')
 
-@app.route('/shanyi/ap/activities/<int:aid>', methods=['GET'])
-def get_activity(aid):
-    task = filter(lambda t: t['id'] == aid, tasks)
-    if len(task) == 0:
-        abort(404)
-    return jsonify({'task': task[0]})
 
-
-#test
-tasks = [
-    {
-        'id': 1,
-        'title': u'Buy groceries',
-        'description': u'Milk, Cheese, Pizza, Fruit, Tylenol',
-        'done': False
-    },
-    {
-        'id': 2,
-        'title': u'Learn Python',
-        'description': u'Need to find a good Python tutorial on the web',
-        'done': False
-    }
-]
-@app.route('/todo/api/v1.0/tasks', methods=['GET'])
-@auth.login_required
-def get_tasks():
-    return jsonify({'tasks': tasks})
-
-@app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['GET'])
-def get_task(task_id):
-    task = filter(lambda t: t['id'] == task_id, tasks)
-    if len(task) == 0:
-        abort(404)
-    return jsonify({'task': task[0]})
-
-@app.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
 
 if __name__ == '__main__':
     app.run(debug=True, port=HOST_PORT)
