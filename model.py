@@ -2,14 +2,16 @@
 from sqlalchemy import Column, Date, DateTime, ForeignKey, Index, Integer, SmallInteger, String, Table, Text, \
                        text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, sessionmaker
 from flask import Flask
 from config import *
 import sys, os
 
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
-
+Session = sessionmaker()
+Session.configure(bind=engine)
 Base = declarative_base()
+session = Session()
 
 class User(Base):
     __tablename__ = 'users'
@@ -20,6 +22,13 @@ class User(Base):
     gender = Column(Integer)
     type = Column(Integer)
     loginTime = Column(String(255))
+
+    def init_user(self, **kwargs):
+        for key in kwargs:
+            setattr(self, key, kwargs[key])
+
+    def get_dict(self):
+        return {'uid':self.uid, 'openId':self.openId, 'nickName':self.nickName, 'gender':self.gender, 'type':self.type, 'loginTime':self.loginTime}
 
 
 
@@ -32,6 +41,13 @@ class Activity(Base):
     time = Column(String(255))
     content = Column(String(255))
     summary = Column(String(255))
+
+    def init_activity(self, **kwargs):
+        for key in kwargs:
+            setattr(self, key, kwargs[key])
+
+    def get_dict(self):
+        return {'aid':self.aid, 'name':self.name, 'organizer':self.organizer, 'time':self.time, 'content':self.content, 'summary':self.summary}
 
 
 class Participant(Base):
