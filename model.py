@@ -6,12 +6,16 @@ from sqlalchemy.orm import relationship, sessionmaker
 from flask import Flask
 from config import *
 import sys, os
+import time
 
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
 Session = sessionmaker()
 Session.configure(bind=engine)
 Base = declarative_base()
 session = Session()
+
+def get_time():
+    return time.strftime("%Y-%m-%d %X", time.localtime())
 
 class User(Base):
     __tablename__ = 'users'
@@ -61,6 +65,9 @@ class Participant(Base):
     user = relationship(u'User')
     activity = relationship(u'Activity')
 
+    def get_dict(self):
+        return {'pid':self.pid, 'uid':self.uid, 'aid':self.aid, 'time':self.time}
+
 
 class Moment(Base):
     __tablename__ = 'moments'
@@ -75,6 +82,12 @@ class Moment(Base):
     user = relationship(u'User')
     activity = relationship(u'Activity')
 
+    def init_moment(self, **kwargs):
+        for key in kwargs:
+            setattr(self, key, kwargs[key])
+
+    def get_dict(self):
+        return {'mid':self.mid, 'uid':self.uid, 'aid':self.aid, 'time':self.time, 'content':self.content, 'access':self.access}
 
 class MomentLike(Base):
     __tablename__ = 'moment_likes'
@@ -100,6 +113,9 @@ class MomentComment(Base):
     user = relationship(u'User')
     moment = relationship(u'Moment')
 
+    def get_dict(self):
+        return {'cmid':self.cmid, 'mid':self.mid, 'uid':self.uid, 'content':self.content, 'time':self.time}
+
 
 class MomentImage(Base):
     __tablename__ = 'moment_images'
@@ -109,6 +125,9 @@ class MomentImage(Base):
     md5 = Column(String(255))
 
     moment = relationship(u'Moment')
+
+    def get_dict(self):
+        return {'imid':self.imid, 'mid':self.mid, 'md5':self.md5}
 
 
 # class Message(Base):

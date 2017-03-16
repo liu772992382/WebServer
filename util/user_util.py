@@ -17,14 +17,16 @@ def get_user(*args):
         return tmp
 
 def create_user(**kwargs):
+    tmp = {'status':False}
     tmp_user = User()
     tmp_user.init_user(**kwargs)
     try:
         session.add(tmp_user)
         session.commit()
-        return True
+        tmp['status'] = True
+        return tmp
     except:
-        return False
+        return tmp
 
 def update_user(**kwargs):
     tmp = {'status':False}
@@ -45,12 +47,14 @@ def update_user(**kwargs):
         return tmp
 
 def delete_user(open_id):
+    tmp = {'status':False}
     # try:
-    delete_users = session.query(User).filter_by(openId=open_id).all()
+    tmp_users = session.query(User).filter_by(openId=open_id).all()
     try:
-        for i in delete_users:
+        for i in tmp_users:
             session.delete(i)
         session.commit()
-        return True
+        tmp['status'] = True
+        return tmp
     except:
-        return False
+        return tmp
