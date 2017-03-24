@@ -58,3 +58,23 @@ def delete_user(open_id):
         return tmp
     except:
         return tmp
+
+def if_user_exist(open_id):
+    tmp = {'status':False}
+    tmp_user = session.query(User).filter_by(openId=open_id).all()
+    if tmp_user != []:
+        tmp['data'] = tmp_user
+        tmp['status'] = True
+        return tmp
+    else:
+        return tmp
+
+def user_login(open_id):
+    tmp = {'status':False}
+    tmp_user = if_user_exist(open_id)
+    if tmp_user['status']:
+        tmp_user['data'].time = get_time()
+        tmp['status'] = True
+        return tmp
+    else:
+        return tmp

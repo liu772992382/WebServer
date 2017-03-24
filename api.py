@@ -12,67 +12,10 @@ import time
 from flask_httpauth import HTTPBasicAuth
 from collections import OrderedDict
 from flask_restful import Resource, Api, reqparse, fields, marshal_with
+from utils.moment_util import *
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
-api = Api(app)
-
-# parser = reqparse.RequestParser()
-# parser.add_argument('rate', type=int, help='Rate to charge for this resource')
-# args = parser.parse_args()
-
-TODOS = {
-    'todo1': {'task': 'build an API'},
-    'todo2': {'task': '?????'},
-    'todo3': {'task': 'profit!'},
-}
-
-
-def abort_if_todo_doesnt_exist(aid):
-    if aid not in TODOS:
-        abort(404, message="Todo {} doesn't exist".format(aid))
-
-parser = reqparse.RequestParser()
-parser.add_argument('task', type=str)
-
-
-# Todo
-#   show a single todo item and lets you delete them
-class ActivityApi(Resource):
-    def get(self, aid):
-        abort_if_todo_doesnt_exist(aid)
-        return TODOS[aid]
-
-    def delete(self, aid):
-        abort_if_todo_doesnt_exist(aid)
-        del TODOS[aid]
-        return '', 204
-
-    def put(self, aid):
-        args = parser.parse_args()
-        task = {'task': args['task']}
-        TODOS[aid] = task
-        return task, 201
-
-
-# TodoList
-#   shows a list of all todos, and lets you POST to add new tasks
-class ActivityList(Resource):
-    def get(self):
-        return TODOS
-
-    def post(self):
-        args = parser.parse_args()
-        aid = int(max(TODOS.keys()).lstrip('todo')) + 1
-        aid = 'todo%i' % aid
-        TODOS[aid] = {'task': args['task']}
-        return TODOS[aid], 201
-
-##
-## Actually setup the Api resource routing here
-##
-api.add_resource(TodoList, '/todos')
-api.add_resource(Todo, '/todos/<todo_id>')
 
 
 @auth.get_password
@@ -99,15 +42,36 @@ tmp = {}
 def get_time():
 	return time.strftime("%Y-%m-%d %X", time.localtime())
 
-# class UserApi(Resource):
-#     def get(self, uid):
-#         return {uid: tmp[uid]}
-#
-#     def put(self, uid):
-#         tmp[uid] = request.form['data']
-#         return {uid: tmp[uid]}
-#
-# api.add_resource(UserApi, '/shanyi/user/<string:uid>')
+
+@app.route('/shanyi/wx/user/get/<string:open_id>', methods=["GET"])
+def user_get(open_id):
+    tmp = get_user(*[open_id])
+
+@app.route('/shanyi/wx/moment/get_all', methods=['GET'])
+def moment_getAll():
+    return jsonify(get_all_moment())
+
+@app.route('/shanyi/wx/moment/<int:mid>', methods=['GET'])
+def moment_getById(mid):
+    return jsonify(get_moment(mid))
+
+@app.route('/shanyi/wx/moment/create', methods=['POST'])
+def moment_create():
+    return jsonify(create_moment(**request.form.to_dict()))
+
+@app.route('/shanyi/wx/moment/delete/<int:mid>', methods=['GET'])
+def moment_delete(mid):
+    return jsonify(delete_moment(mid))
+
+@app.route('/shanyi/wx/moment/get_likes/<int:mid>', methods=['GET'])
+def moment_getLikes(mid):
+    return jsonify(get_likes(mid))
+
+@app.route('/shanyi/wx/moment/like', methods=['POST'])
+def moment_like():
+    pass
+
+
 
 
 

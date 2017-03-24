@@ -12,4 +12,4 @@ ADMIN_USERNAME = 'Shanyi'
 ADMIN_PASSWORD = 'ShanyiAdmin'
 
 UPLOAD_FOLDER = 'static/img/upload/'
-HOST_PORT = 8011
+HOST_PORT = 8081

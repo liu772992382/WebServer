@@ -26,13 +26,14 @@ class User(Base):
     gender = Column(Integer)
     type = Column(Integer)
     loginTime = Column(String(255))
+    avatar = Column(String(255))
 
     def init_user(self, **kwargs):
         for key in kwargs:
             setattr(self, key, kwargs[key])
 
     def get_dict(self):
-        return {'uid':self.uid, 'openId':self.openId, 'nickName':self.nickName, 'gender':self.gender, 'type':self.type, 'loginTime':self.loginTime}
+        return {'uid':self.uid, 'openId':self.openId, 'nickName':self.nickName, 'gender':self.gender, 'type':self.type, 'loginTime':self.loginTime, 'avatar':self.avatar}
 
 
 

@@ -32,12 +32,14 @@ def create_moment(**kwargs):
     tmp = {'status':False}
     tmp_moment = Moment()
     tmp_moment.init_moment(**kwargs)
+    tmp_moment.time = get_time()
     try:
         session.add(tmp_moment)
         session.commit()
         tmp['status'] = True
         return tmp
-    except:
+    except Exception, e:
+        print Exception, e
         return tmp
 
 # def update_moment(**kwargs):
@@ -58,15 +60,16 @@ def create_moment(**kwargs):
 #         return tmp
 
 def delete_moment(mid):
-    # try:
+    tmp = {'status':False}
     delete_moments = session.query(Moment).filter_by(mid=mid).all()
     try:
         for i in delete_moments:
             session.delete(i)
         session.commit()
-        return True
+        tmp['status'] = True
+        return tmp
     except:
-        return False
+        return tmp
 
 
 def get_like_status(mid, uid):
@@ -78,6 +81,19 @@ def get_like_status(mid, uid):
         return tmp
     else:
         return tmp
+
+def get_likes(mid):
+    tmp = {'status':False, 'data':[]}
+    tmp_likes = session.query(MomentLike).filter_by(mid=mid).all()
+    try:
+        for i in tmp_likes:
+            tmp['data'].append(i.uid)
+        tmp['status'] = True
+        return tmp
+    except Exception, e:
+        print Exception, e
+        return tmp
+
 
 def like_moment(mid, uid):
     tmp = {'status':False}
