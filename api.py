@@ -17,6 +17,9 @@ from utils.moment_util import *
 app = Flask(__name__)
 auth = HTTPBasicAuth()
 
+@app.teardown_request
+def shutdown_session(exception=None):
+    session.close()
 
 @auth.get_password
 def get_password(username):
