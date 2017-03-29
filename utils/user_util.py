@@ -16,6 +16,18 @@ def get_user(*args):
     except:
         return tmp
 
+def get_all_user():
+    tmp = {'status':False, 'data':[]}
+    try:
+        users = session.query(User).all()
+        for i in users:
+            tmp['data'].append(i.get_dict())
+    except:
+        pass
+    finally:
+        return tmp
+
+
 def create_user(**kwargs):
     tmp = {'status':False}
     tmp_user = User()
@@ -40,8 +52,6 @@ def update_user(**kwargs):
         except:
             tmp['info'] = 'error'
             return tmp
-
-
     else:
         tmp['info'] = 'No such openId user'
         return tmp

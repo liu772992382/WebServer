@@ -11,5 +11,7 @@ SECRET_KEY = 'Shanyi'
 ADMIN_USERNAME = 'Shanyi'
 ADMIN_PASSWORD = 'ShanyiAdmin'
 
-UPLOAD_FOLDER = 'static/img/upload/'
+UPLOAD_FOLDER = 'images/upload'
 HOST_PORT = 8081
+
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
