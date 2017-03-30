@@ -13,6 +13,8 @@ from flask_httpauth import HTTPBasicAuth
 from collections import OrderedDict
 from flask_restful import Resource, Api, reqparse, fields, marshal_with
 from utils.moment_util import *
+from utils.user_util import *
+from utils.activity_util import *
 from werkzeug import secure_filename
 
 
@@ -53,31 +55,28 @@ def get_time():
 #--------------------用户接口---------------------
 
 @app.route('/shanyi/wx/user/get/<string:open_id>', methods=["GET"])
-def user_get(open_id):
-    req_oid = request.form.get('open_id')
-    return jsonify(get_user(req_oid))
+def user_get(openId):
+    return jsonify(get_user(openId))
 
 @app.route('/shanyi/wx/user/get_all', methods=['GET'])
 def user_get_all():
-    return jsonify(get_all_moment())
+    return jsonify(get_all_user())
 
-@app.route('/shanyi/wx/user/create_user', methods = ['POST'])
+@app.route('/shanyi/wx/user/create', methods = ['POST'])
 def user_create_user():
     return jsonify(create_user(**request.form.to_dict()))
 
-@app.route('/shanyi/wx/user/update_user', methods = ['POST'])
+@app.route('/shanyi/wx/user/update', methods = ['POST'])
 def user_update_user():
     return jsonify(update_user(**request.form.to_dict()))
 
-@app.route('/shanyi/wx/user/delete_user/<int:open_id', methods = ['GET'])
-def user_delete(open_id):
-    req_oid = request.form.get('open_id')
-    return jsonify(delete_user(req_oid))
+@app.route('/shanyi/wx/user/delete/<int:openId>', methods = ['GET'])
+def user_delete(openId):
+    return jsonify(delete_user(openId))
 
-@app.route('/shanyi/wx/user/user_login/<int:open_id', methods = ['GET'])
-def user_login(open_id):
-    req_oid = request.form.get('open_id')
-    return jsonify(user_login(req_oid))
+@app.route('/shanyi/wx/user/login/<int:openId>', methods = ['GET'])
+def user_login(openId):
+    return jsonify(login_user(openId))
 
 
 

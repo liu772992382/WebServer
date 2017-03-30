@@ -17,6 +17,8 @@ session = Session()
 def get_time():
     return time.strftime("%Y-%m-%d %X", time.localtime())
 
+
+
 class User(Base):
     __tablename__ = 'users'
 
@@ -27,13 +29,15 @@ class User(Base):
     type = Column(Integer)
     loginTime = Column(String(255))
     avatar = Column(String(255))
+    createTime = Column(String(255))
 
     def init_user(self, **kwargs):
         for key in kwargs:
             setattr(self, key, kwargs[key])
 
     def get_dict(self):
-        return {'uid':self.uid, 'openId':self.openId, 'nickName':self.nickName, 'gender':self.gender, 'type':self.type, 'loginTime':self.loginTime, 'avatar':self.avatar}
+        self.__dict__.pop('_sa_instance_state')
+        return self.__dict__
 
 
 
@@ -42,7 +46,7 @@ class Activity(Base):
 
     aid = Column(Integer, primary_key=True)
     name = Column(String(255))
-    organizer = Column(String(255))
+    organizer = Column(ForeignKey(u'users.uid', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)
     time = Column(String(255))
     content = Column(String(255))
     summary = Column(String(255))
@@ -52,8 +56,8 @@ class Activity(Base):
             setattr(self, key, kwargs[key])
 
     def get_dict(self):
-        return {'aid':self.aid, 'name':self.name, 'organizer':self.organizer, 'time':self.time, 'content':self.content, 'summary':self.summary}
-
+        self.__dict__.pop('_sa_instance_state')
+        return self.__dict__
 
 class Participant(Base):
     __tablename__ = 'participants'
@@ -67,8 +71,8 @@ class Participant(Base):
     activity = relationship(u'Activity')
 
     def get_dict(self):
-        return {'pid':self.pid, 'uid':self.uid, 'aid':self.aid, 'time':self.time}
-
+        self.__dict__.pop('_sa_instance_state')
+        return self.__dict__
 
 class Moment(Base):
     __tablename__ = 'moments'
@@ -88,7 +92,9 @@ class Moment(Base):
             setattr(self, key, kwargs[key])
 
     def get_dict(self):
-        return {'mid':self.mid, 'uid':self.uid, 'aid':self.aid, 'time':self.time, 'content':self.content, 'access':self.access}
+        self.__dict__.pop('_sa_instance_state')
+        return self.__dict__
+
 
 class MomentLike(Base):
     __tablename__ = 'moment_likes'
@@ -115,8 +121,8 @@ class MomentComment(Base):
     moment = relationship(u'Moment')
 
     def get_dict(self):
-        return {'cmid':self.cmid, 'mid':self.mid, 'uid':self.uid, 'content':self.content, 'time':self.time}
-
+        self.__dict__.pop('_sa_instance_state')
+        return self.__dict__
 
 class MomentImage(Base):
     __tablename__ = 'moment_images'
@@ -128,8 +134,8 @@ class MomentImage(Base):
     moment = relationship(u'Moment')
 
     def get_dict(self):
-        return {'imid':self.imid, 'mid':self.mid, 'md5':self.md5}
-
+        self.__dict__.pop('_sa_instance_state')
+        return self.__dict__
 
 # class Message(Base):
 #     __tablename__ = 'messages'
