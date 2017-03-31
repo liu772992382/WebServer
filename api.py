@@ -54,11 +54,13 @@ def get_time():
 
 #--------------------用户接口---------------------
 
-@app.route('/shanyi/wx/user/get/<string:open_id>', methods=["GET"])
+@app.route('/shanyi/wx/user/get/<string:openId>', methods=["GET"])
 def user_get(openId):
     return jsonify(get_user(openId))
+    #返回值
 
-@app.route('/shanyi/wx/user/get_all', methods=['GET'])
+@app.route('/shanyi/wx/user/get', methods=['GET'])
+@app.route('/shanyi/wx/user/get/', methods=['GET'])
 def user_get_all():
     return jsonify(get_all_user())
 
@@ -99,7 +101,7 @@ def activity_update():
 
 @app.route('/shanyi/wx/activity/delete/<int:aid>', methods = ['GET'])
 def activity_delete(aid):
-    return delete_activity(aid)
+    return jsonify(delete_activity(aid))
 
 @app.route('/shanyi/wx/activity/participant/get/<int:aid>', methods = ['GET'])
 def activity_participant_get(aid):
@@ -152,18 +154,18 @@ def moment_cancel_like():
     req_uid = request.form.get('uid')
     return jsonify(cancel_like(req_mid, req_uid))
 
-@app.route('/shanyi/wx/moment/create_moment', methods = ['POST'])
+@app.route('/shanyi/wx/moment/create_comment', methods = ['POST'])
 def moment_create_comment():
     req_mid = request.form.get('mid')
     req_uid = request.form.get('uid')
     req_content = request.form.get('content')
-    return jsonify(create_moment(req_mid, req_uid, req_content))
+    return jsonify(create_comment(req_mid, req_uid, req_content))
 
 @app.route('/shanyi/wx/moment/comments/<int:mid>', methods = ['GET'])
 def moment_comments(mid):
     return jsonify(get_comments(mid))
 
-@app.route('/shanyi/wx/moment/add_image', methods = ['POST'])
+@app.route('/shanyi/wx/moment/add_image', methods = ['POST'])#待测试
 def moment_add_image():
     file0 = request.files['file']
     req_mid = request.form.get('mid')

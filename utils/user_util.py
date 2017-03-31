@@ -25,9 +25,9 @@ def get_all_user():
         users = session.query(User).all()
         for i in users:
             tmp['data'].append(i.get_dict())
+        tmp['status'] = True
+        return tmp
     except:
-        pass
-    finally:
         return tmp
 
 def if_user_exist(open_id):
@@ -50,6 +50,7 @@ def create_user(**kwargs):
         try:
             session.add(tmp_user)
             session.commit()
+            tmp['data'] = tmp_user.uid
             tmp['status'] = True
             return tmp
         except:

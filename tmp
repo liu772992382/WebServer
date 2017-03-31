@@ -1,0 +1,219 @@
+
+'/shanyi/wx/user/get/<string:openId>' methods=["GET"]
+参数      含义
+openId   微信用户id *
+
+返回格式：
+{
+  "data": [
+    {
+      "avatar": null,
+      "createTime": null,
+      "gender": 1,
+      "loginTime": "2017-03-30 15:42:04",
+      "nickName": "admin",
+      "openId": "1",
+      "type": 1,
+      "uid": 1
+    }
+  ],
+  "status": true
+}
+
+
+'/shanyi/wx/user/get' methods=['GET']
+'/shanyi/wx/user/get/' methods=['GET']
+参数    含义
+无      无
+
+返回格式：
+{
+  "data": [
+    {
+      "avatar": null,
+      "createTime": null,
+      "gender": 1,
+      "loginTime": "2017-03-30 15:42:04",
+      "nickName": "admin",
+      "openId": "1",
+      "type": 1,
+      "uid": 1
+    },
+    {
+      "avatar": "222",
+      "createTime": null,
+      "gender": 0,
+      "loginTime": "2017-03-30 15:05:35",
+      "nickName": "六系哦啊鱼1",
+      "openId": "3",
+      "type": 1,
+      "uid": 5
+    },
+  ],
+  "status": true
+}
+
+'/shanyi/wx/user/create' methods = ['POST']
+参数        含义
+openId     微信用户id *
+nickName   用户昵称
+gender     性别
+type       用户类型
+avatar     用户头像链接
+
+返回格式：
+{
+  "data": 8, #用户id：uid
+  "status": true
+}
+
+
+'/shanyi/wx/user/update' methods = ['POST']
+参数
+avatar
+createTime
+gender
+loginTime
+nickName
+openId  *
+type
+uid
+
+返回格式：
+{
+  "status": true
+}
+
+'/shanyi/wx/user/delete/<int:openId>' methods = ['GET']
+参数
+openId  *
+
+返回格式：
+{
+  "status": true
+}
+
+'/shanyi/wx/user/login/<int:openId>' methods = ['GET']
+参数
+openId  *
+
+返回格式：
+{
+  "status": true
+}
+
+'/shanyi/wx/activity/get_all' methods = ['GET']
+参数
+无
+
+返回格式：
+{
+  "data": [
+    {
+      "aid": 2,
+      "content": "data...",
+      "createTime": null,
+      "name": "123",
+      "organizer": 1,
+      "summary": "test data",
+      "time": null
+    },
+  ],
+  "status": true
+}
+
+'/shanyi/wx/activity/get/<int:aid>' methods = ['GET']
+参数
+aid *
+
+返回格式：
+{
+  "data": [
+    {
+      "aid": 2,
+      "content": "data...",
+      "createTime": null,
+      "name": "123",
+      "organizer": 1,
+      "summary": "test data",
+      "time": null
+    }
+  ],
+  "status": true
+}
+
+
+'/shanyi/wx/activity/create' methods = ['POST']
+参数
+content
+name
+organizer *
+summary
+time
+
+返回格式：
+{
+  "data": 10,
+  "status": true
+}
+
+'/shanyi/wx/activity/update' methods = ['POST']
+参数
+aid *
+content
+name
+organizer
+summary
+time
+
+返回格式：
+{
+  "status": true
+}
+
+
+'/shanyi/wx/activity/delete/<int:aid>' methods = ['GET']
+参数
+
+
+
+'/shanyi/wx/activity/participant/get/<int:aid>' methods = ['GET']
+
+
+'/shanyi/wx/activity/participant/add' methods = ['POST']
+
+
+'/shanyi/wx/activity/participant/delete' methods = ['POST']
+
+
+'/shanyi/wx/moment/get_all' methods=['GET']
+
+
+'/shanyi/wx/moment/<int:mid>' methods=['GET']
+
+
+'/shanyi/wx/moment/create' methods=['POST']
+
+
+'/shanyi/wx/moment/delete/<int:mid>' methods=['GET']
+
+
+'/shanyi/wx/moment/get_likes/<int:mid>' methods=['GET']
+
+
+'/shanyi/wx/moment/like' methods=['POST']
+
+
+'/shanyi/wx/moment/cancel_like' methods=['POST']
+
+
+'/shanyi/wx/moment/create_comment' methods = ['POST']
+
+
+'/shanyi/wx/moment/comments/<int:mid>' methods = ['GET']
+
+
+'/shanyi/wx/moment/add_image' methods = ['POST']#待测试
+
+
+'/shanyi/wx/moment/images/<int:mid>' methods = ['GET']

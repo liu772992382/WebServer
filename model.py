@@ -50,6 +50,9 @@ class Activity(Base):
     time = Column(String(255))
     content = Column(String(255))
     summary = Column(String(255))
+    createTime = Column(String(255))
+
+    user = relationship(u'User')
 
     def init_activity(self, **kwargs):
         for key in kwargs:

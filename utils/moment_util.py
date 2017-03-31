@@ -28,7 +28,7 @@ def get_all_moment():
     finally:
         return tmp
 
-def create_moment(**kwargs):
+def create_moment(**kwargs):#返回数据存在bug
     tmp = {'status':False}
     tmp_moment = Moment()
     tmp_moment.init_moment(**kwargs)
@@ -36,6 +36,7 @@ def create_moment(**kwargs):
     try:
         session.add(tmp_moment)
         session.commit()
+        tmp['data'] = tmp_moment.mid
         tmp['status'] = True
         return tmp
     except Exception, e:
