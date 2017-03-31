@@ -173,7 +173,7 @@ def add_image(mid, md5):
 
 def get_images(mid):
     tmp = {'status':False, 'data':[]}
-    tmp_images = session.query(MomentImage).all()
+    tmp_images = session.query(MomentImage).filter_by(mid=mid).all()
     if tmp_images != []:
         for i in tmp_images:
             tmp['data'].append(i.get_dict())

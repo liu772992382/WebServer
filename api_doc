@@ -1,3 +1,8 @@
+#---------------------------------------------------
+* 表示必传参数
+
+
+
 
 '/shanyi/wx/user/get/<string:openId>' methods=["GET"]
 参数      含义
@@ -174,46 +179,198 @@ time
 
 '/shanyi/wx/activity/delete/<int:aid>' methods = ['GET']
 参数
+aid *
 
+返回格式：
+{
+  "status": true
+}
 
 
 '/shanyi/wx/activity/participant/get/<int:aid>' methods = ['GET']
+参数
+aid
 
+返回参数：
+{
+  "data": [
+    {
+      "aid": 2,
+      "pid": 2,
+      "time": "2017-03-16 11:22:28",
+      "uid": 1
+    }
+  ],
+  "status": true
+}
 
 '/shanyi/wx/activity/participant/add' methods = ['POST']
+参数
+aid *
+uid *
+
+返回参数：
+{
+  "status": true
+}
 
 
 '/shanyi/wx/activity/participant/delete' methods = ['POST']
+参数
+aid *
+uid *
 
+返回参数：
+{
+  "status": true
+}
 
 '/shanyi/wx/moment/get_all' methods=['GET']
+参数
+无
 
+返回参数：
+{
+  "data": [
+    {
+      "access": null,
+      "aid": 3,
+      "content": "\u963f\u65af\u987f\u53d1", #中文
+      "mid": 4,
+      "time": "2222",
+      "uid": 1
+    },
+  ],
+  "status": true
+}
 
 '/shanyi/wx/moment/<int:mid>' methods=['GET']
+参数
+mid *
+
+返回格式：
+{
+  "data": [
+    {
+      "access": null,
+      "aid": 4,
+      "content": "test_api",
+      "mid": 9,
+      "time": "2017-03-30 20:22:00",
+      "uid": 5
+    }
+  ],
+  "status": true
+}
 
 
 '/shanyi/wx/moment/create' methods=['POST']
+参数：
+access
+content *
+mid *
+uid *
+
+返回参数:
 
 
 '/shanyi/wx/moment/delete/<int:mid>' methods=['GET']
+参数：
+mid
+
+返回格式：
+{
+  "status": true
+}
 
 
 '/shanyi/wx/moment/get_likes/<int:mid>' methods=['GET']
+参数：
+mid *
 
+返回格式：
+{
+  "data": [
+    5 #用户id--uid
+  ],
+  "status": true
+}
 
 '/shanyi/wx/moment/like' methods=['POST']
+参数：
+mid *
+uid *
+
+返回格式：
+{
+  "status": true
+}
 
 
 '/shanyi/wx/moment/cancel_like' methods=['POST']
+参数：
+mid *
+uid *
+
+返回格式：
+{
+  "status": true
+}
 
 
 '/shanyi/wx/moment/create_comment' methods = ['POST']
+参数：
+mid *
+uid *
+content *
+
+返回格式：
+{
+  "status": true
+}
 
 
 '/shanyi/wx/moment/comments/<int:mid>' methods = ['GET']
+参数
+mid *
+
+返回格式：
+{
+  "data": [
+    {
+      "cmid": 1,
+      "content": "ttt",
+      "mid": 4,
+      "time": "2017-03-30 21:31:12",
+      "uid": 6
+    },
+    {
+      "cmid": 2,
+      "content": "66666",
+      "mid": 4,
+      "time": "2017-03-30 21:31:33",
+      "uid": 6
+    }
+  ],
+  "status": true
+}
 
 
 '/shanyi/wx/moment/add_image' methods = ['POST']#待测试
 
 
 '/shanyi/wx/moment/images/<int:mid>' methods = ['GET']
+参数
+mid *
+
+返回格式：
+{
+  "data": [
+    {
+      "imid": 1,
+      "md5": "123asdfas123ref13ef134f",  #图片文件名
+      "mid": 8
+    }
+  ],
+  "status": true
+}

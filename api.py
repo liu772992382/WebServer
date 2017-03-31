@@ -126,7 +126,7 @@ def activity_participant_delete():
 def moment_getAll():
     return jsonify(get_all_moment())
 
-@app.route('/shanyi/wx/moment/<int:mid>', methods=['GET'])
+@app.route('/shanyi/wx/moment/get/<int:mid>', methods=['GET'])
 def moment_getById(mid):
     return jsonify(get_moment(mid))
 
@@ -178,8 +178,7 @@ def moment_add_image():
 
 @app.route('/shanyi/wx/moment/images/<int:mid>', methods = ['GET'])
 def moment_get_images(mid):
-    req_mid = request.form.get('mid')
-    return jsonify(get_images(req_mid))
+    return jsonify(get_images(mid))
 
 
 
