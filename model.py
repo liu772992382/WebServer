@@ -28,7 +28,8 @@ class User(Base):
     gender = Column(Integer)    #性别
     type = Column(Integer)  #用户类型，具体类型待定
     loginTime = Column(String(255)) #用户上次登陆时间
-    avatar = Column(String(255))    #用户头像链接
+    avatarUrl = Column(String(255))    #用户头像链接
+    city = Column(String(255))  #所在城市
     createTime = Column(String(255))    #用户创建时间
 
     def init_user(self, **kwargs):
@@ -165,6 +166,7 @@ class Corporation(Base):
     uid = Column(ForeignKey(u'users.uid', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)    #团队用户编号
     slogan = Column(String(255))    #团队口号
     intro = Column(String(255)) #团队介绍
+    # thumbs = Column(Integer)    #点赞数量
 
     user = relationship(u'User')
 

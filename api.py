@@ -63,21 +63,29 @@ def user_get(openId):
 def user_get_all():
     return jsonify(get_all_user())
 
+@app.route('/shanyi/wx/user/exist/<openId>', methods=['GET'])
+def user_exist(openId):
+    return jsonify(if_user_exist(openId))
+
 @app.route('/shanyi/wx/user/create', methods = ['POST'])
-def user_create_user():
+def user_create():
     return jsonify(create_user(**request.form.to_dict()))
 
 @app.route('/shanyi/wx/user/update', methods = ['POST'])
-def user_update_user():
+def user_update():
     return jsonify(update_user(**request.form.to_dict()))
 
 @app.route('/shanyi/wx/user/delete/<int:openId>', methods = ['GET'])
 def user_delete(openId):
     return jsonify(delete_user(openId))
 
-@app.route('/shanyi/wx/user/login/<int:openId>', methods = ['GET'])
-def user_login(openId):
-    return jsonify(login_user(openId))
+@app.route('/shanyi/wx/user/login', methods = ['POST'])
+def user_login():
+    tmp_info = request.form.to_dict()
+    if not if_user_exist(tmp_info['openId'])['status']:
+        return jsonify(create_user(**tmp_info))
+    else:
+        return jsonify(login_user(tmp_info['openId']))
 
 @app.route('/shanyi/wx/user/corp/get/<int:uid>', methods = ['GET'])
 def corp_get(uid):

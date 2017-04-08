@@ -46,6 +46,7 @@ def create_user(**kwargs):
     if not if_user_exist(kwargs['openId'])['status']:
         tmp_user = User()
         tmp_user.createTime = get_time()
+        tmp_user.loginTime = get_time()
         tmp_user.init_user(**kwargs)
         try:
             session.add(tmp_user)
@@ -129,3 +130,12 @@ def get_all_corporation():
         return tmp
     except:
         return tmp
+
+# def get_corp_likes(uid):
+#     tmp = {'status':False}
+#     try:
+#         tmp['data'] = len(session.query(MomentLike).filter_by(uid=uid).all())
+#         tmp['status'] = True
+#         return tmp
+#     except:
+#         return tmp
