@@ -104,3 +104,28 @@ def login_user(open_id):
         return tmp
     else:
         return tmp
+
+
+def get_corporation(*args):
+    tmp = {'status':False, 'data':[]}
+    try:
+        for i in args:
+            print i
+            tmp['data'].append(session.query(Corporation).filter_by(uid=i).first().get_dict())
+        tmp['status'] = True
+        return tmp
+    except Exception, e:
+        print Exception, e
+        tmp['info'] = 'No such Corporation'
+        return tmp
+
+def get_all_corporation():
+    tmp = {'status':False, 'data':[]}
+    try:
+        corps = session.query(Corporation).all()
+        for i in corps:
+            tmp['data'].append(i.get_dict())
+        tmp['status'] = True
+        return tmp
+    except:
+        return tmp

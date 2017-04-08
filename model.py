@@ -51,12 +51,29 @@ class Activity(Base):
     content = Column(String(255))   #活动内容
     summary = Column(String(255))   #活动概要
     createTime = Column(String(255))    #活动创建时间
+    cover = Column(String(255)) #封面图片的文件名
+    location = Column(String(255))  #活动地址
+    state = Column(Integer) #活动状态,1为正在进行，0为结束
 
     user = relationship(u'User')
 
     def init_activity(self, **kwargs):
         for key in kwargs:
             setattr(self, key, kwargs[key])
+
+    def get_dict(self):
+        self.__dict__.pop('_sa_instance_state')
+        return self.__dict__
+
+
+class ActivityImage(Base):
+    __tablename__ = 'activity_image'
+
+    aimid = Column(Integer, primary_key=True)
+    md5 = Column(String(255))
+    aid = Column(ForeignKey(u'activities.aid', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)   #参与者参与的活动
+
+    activity = relationship(u'Activity')
 
     def get_dict(self):
         self.__dict__.pop('_sa_instance_state')
@@ -140,9 +157,17 @@ class MomentImage(Base):
         self.__dict__.pop('_sa_instance_state')
         return self.__dict__
 
-# class Message(Base):
-#     __tablename__ = 'messages'
-#
-#     msid = Column(Integer, primary_key=True)
-#     uid = Column(ForeignKey(u'users.uid', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)
-#     fanUid = Column(ForeignKey(u'users.uid', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)
+
+class Corporation(Base):
+    __tablename__ = 'corporation'
+
+    cid = Column(Integer, primary_key=True)
+    uid = Column(ForeignKey(u'users.uid', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)    #团队用户编号
+    slogan = Column(String(255))    #团队口号
+    intro = Column(String(255)) #团队介绍
+
+    user = relationship(u'User')
+
+    def get_dict(self):
+        self.__dict__.pop('_sa_instance_state')
+        return self.__dict__

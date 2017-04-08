@@ -79,12 +79,22 @@ def user_delete(openId):
 def user_login(openId):
     return jsonify(login_user(openId))
 
+@app.route('/shanyi/wx/user/corp/get/<int:uid>', methods = ['GET'])
+def corp_get(uid):
+    return jsonify(get_corporation(uid))
+
+@app.route('/shanyi/wx/user/corp/get_all', methods = ['GET'])
+def corp_get_all():
+    return jsonify(get_all_corporation())
 
 
 #--------------------活动接口---------------------
 @app.route('/shanyi/wx/activity/get_all', methods = ['GET'])
 def activity_get_all():
-    return jsonify(get_all_activities())
+    tmp_activities = get_all_activities()
+    for i in tmp_activities['data']:
+        i['thumbs'] = len(get_participants(i['aid'])['data'])
+    return jsonify(tmp_activities)
 
 @app.route('/shanyi/wx/activity/get/<int:aid>', methods = ['GET'])
 def activity_get(aid):
@@ -178,6 +188,7 @@ def moment_add_image():
 @app.route('/shanyi/wx/moment/images/<int:mid>', methods = ['GET'])
 def moment_get_images(mid):
     return jsonify(get_images(mid))
+
 
 
 
