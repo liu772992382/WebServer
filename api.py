@@ -52,7 +52,7 @@ tmp = {}
 def get_time():
 	return time.strftime("%Y-%m-%d %X", time.localtime())
 
-@app.route('/api/uptoken', methods = ['POST'])
+@app.route('/shanyi/wx/api/uptoken', methods = ['POST'])
 def uptoken():
     key = request.form.get('filePath')[9:]
 
