@@ -56,6 +56,7 @@ class Activity(Base):
     location = Column(String(255))  #活动地址
     state = Column(Integer) #活动状态,1为正在进行，0为结束
 
+
     user = relationship(u'User')
 
     def init_activity(self, **kwargs):
@@ -166,6 +167,7 @@ class Corporation(Base):
     uid = Column(ForeignKey(u'users.uid', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)    #团队用户编号
     slogan = Column(String(255))    #团队口号
     intro = Column(String(255)) #团队介绍
+    name = Column(String(255))  #团队名称
     # thumbs = Column(Integer)    #点赞数量
 
     user = relationship(u'User')

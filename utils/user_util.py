@@ -6,6 +6,15 @@ sys.path.append("..")
 from model import *
 
 
+def get_uid(openId):
+    tmp = {'status':False, 'data':''}
+    try:
+        tmp['data'] = session.query(User).filter_by(openId=openId).first().uid
+        tmp['status'] = True
+        return tmp
+    except:
+        return tmp
+
 def get_user(*args):
     tmp = {'status':False, 'data':[]}
     try:

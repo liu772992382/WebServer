@@ -106,7 +106,10 @@ def activity_get_all():
 
 @app.route('/shanyi/wx/activity/get/<int:aid>', methods = ['GET'])
 def activity_get(aid):
-    return jsonify(get_activity(aid))
+    tmp_activity = get_activity(aid)
+    tmp_uid = tmp_activity['data'][0]['organizer']
+    tmp_activity['data'][0]['organizerInfo'] = session.query(Corporation).filter_by(uid=tmp_uid).first().get_dict()
+    return jsonify(tmp_activity)
 
 @app.route('/shanyi/wx/activity/create', methods = ['POST'])
 def activity_create():
@@ -126,8 +129,9 @@ def activity_participant_get(aid):
 
 @app.route('/shanyi/wx/activity/participant/add', methods = ['POST'])
 def activity_participant_add():
-    req_uid = request.form.get('uid')
     req_aid = request.form.get('aid')
+    req_uid = session.query(User).filter_by(openId=request.form.get('openId')).first().uid
+    print req_aid, req_uid
     return jsonify(add_participant(req_uid, req_aid))
 
 @app.route('/shanyi/wx/activity/participant/delete', methods = ['POST'])
@@ -136,16 +140,41 @@ def activity_participant_delete():
     req_aid = request.form.get('aid')
     return jsonify(delete_participant(req_uid, req_aid))
 
+@app.route('/shanyi/wx/activity/myrecently/<string:openId>', methods = ['GET'])
+def activity_myrecently(openId):
+    print openId
+    tmp = {'status': True, 'data': ''}
+    tmp_uid = get_uid(openId)['data']
+    tmp_acts = session.query(Participant).filter_by(uid=tmp_uid).all()
+    for i in tmp_acts:
+        tmp['data'] += session.query(Activity).filter_by(aid=i.aid).first().name
+        tmp['data'] += ' '
+    return jsonify(tmp)
+
 
 #--------------------动态接口---------------------
 
 @app.route('/shanyi/wx/moment/get_all', methods=['GET'])
 def moment_getAll():
-    return jsonify(get_all_moment())
+    tmp_moments = get_all_moment()
+    for i in tmp_moments['data']:
+        i['userInfo'] = session.query(User).filter_by(uid=i['uid']).first().get_dict()
+        i['images'] = get_images(i['mid'])['data']
+        i['likeAmount'] = len(get_likes(i['mid'])['data'])
+        i['commentAmount'] = len(get_comments(i['mid'])['data'])
+    return jsonify(tmp_moments)
 
 @app.route('/shanyi/wx/moment/get/<int:mid>', methods=['GET'])
 def moment_getById(mid):
-    return jsonify(get_moment(mid))
+    tmp_moment = get_moment(mid)['data'][0]
+    tmp_moment['userInfo'] = session.query(User).filter_by(uid=tmp_moment['uid']).first().get_dict()
+    tmp_moment['images'] = get_images(tmp_moment['mid'])['data']
+    tmp_moment['likeAmount'] = len(get_likes(tmp_moment['mid'])['data'])
+    tmp_moment['comments'] = get_comments(tmp_moment['mid'])['data']
+    for i in tmp_moment['comments']:
+        i['userInfo'] = session.query(User).filter_by(uid=i['uid']).first().get_dict()
+    tmp_moment['commentAmount'] = len(tmp_moment['comments'])
+    return jsonify(tmp_moment)
 
 @app.route('/shanyi/wx/moment/create', methods=['POST'])
 def moment_create():
@@ -162,7 +191,7 @@ def moment_getLikes(mid):
 @app.route('/shanyi/wx/moment/like', methods=['POST'])
 def moment_like():
     req_mid = request.form.get('mid')
-    req_uid = request.form.get('uid')
+    req_uid = session.query(User).filter_by(openId=request.form.get('openId')).first().uid
     return jsonify(like_moment(req_mid, req_uid))
 
 @app.route('/shanyi/wx/moment/cancel_like', methods=['POST'])
@@ -173,8 +202,9 @@ def moment_cancel_like():
 
 @app.route('/shanyi/wx/moment/create_comment', methods = ['POST'])
 def moment_create_comment():
+    print request.form.get('openId')
+    req_uid = session.query(User).filter_by(openId=request.form.get('openId')).first().uid
     req_mid = request.form.get('mid')
-    req_uid = request.form.get('uid')
     req_content = request.form.get('content')
     return jsonify(create_comment(req_mid, req_uid, req_content))
 

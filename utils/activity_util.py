@@ -97,10 +97,10 @@ def add_participant(uid, aid):
             tmp['status'] = True
             return tmp
         except:
-            tmp['info'] = 'no such uid or aid'
+            tmp['info'] = '报名失败：无此用户或活动'
             return tmp
     else:
-        tmp['info'] = 'this participant is existed'
+        tmp['info'] = '报名失败：你已经报过名了'
         return tmp
 
 def delete_participant(uid, aid):

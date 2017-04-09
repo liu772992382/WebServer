@@ -111,7 +111,7 @@ def like_moment(mid, uid):
         except:
             return tmp
     else:
-        tmp['info'] = 'this like is existed'
+        tmp['info'] = '你已经赞过这条动态'
         return tmp
 
 
