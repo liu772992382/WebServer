@@ -15,6 +15,7 @@ from utils.moment_util import *
 from utils.user_util import *
 from utils.activity_util import *
 from werkzeug import secure_filename
+from test_qiniu import *
 
 
 app = Flask(__name__)
@@ -50,6 +51,16 @@ tmp = {}
 
 def get_time():
 	return time.strftime("%Y-%m-%d %X", time.localtime())
+
+@app.route('/api/uptoken', methods = ['POST'])
+def uptoken():
+    key = request.form.get('filePath')[9:]
+
+    token = q.upload_token(bucket_name, key, 3600)
+
+    print key, token
+    return token
+
 
 #--------------------用户接口---------------------
 
