@@ -54,12 +54,12 @@ def get_time():
 
 @app.route('/shanyi/wx/api/uptoken', methods = ['POST'])
 def uptoken():
-    key = request.form.get('filePath')[9:]
-
-    token = q.upload_token(bucket_name, key, 3600)
-
-    print key, token
-    return token
+    keys = request.form
+    tmp_token = {}
+    for i in keys:
+        tmp_token[keys[i]] = q.upload_token(bucket_name, keys[i][9:], 7200)
+    print tmp_token
+    return jsonify(tmp_token)
 
 
 #--------------------用户接口---------------------
@@ -225,14 +225,9 @@ def moment_comments(mid):
 
 @app.route('/shanyi/wx/moment/add_image', methods = ['POST'])#待测试
 def moment_add_image():
-    file0 = request.files['file']
-    req_mid = request.form.get('mid')
-    if file0 and allowed_file(file0.filename):
-        filename = hashimage(secure_filename(file0.filename))
-        file0.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return jsonify(req_mid, filename)
-    else:
-        return jsonify({'status':False})
+    tmp_mid = request.form.get('mid')
+    tmp_md5 = request.form.get('md5')
+    return jsonify(add_image())
 
 @app.route('/shanyi/wx/moment/images/<int:mid>', methods = ['GET'])
 def moment_get_images(mid):
