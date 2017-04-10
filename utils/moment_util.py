@@ -32,6 +32,8 @@ def create_moment(**kwargs):#返回数据存在bug
     tmp = {'status':False}
     tmp_moment = Moment()
     tmp_moment.init_moment(**kwargs)
+    if not tmp_moment.aid:
+        tmp_moment.aid = 1
     tmp_moment.time = get_time()
     try:
         session.add(tmp_moment)

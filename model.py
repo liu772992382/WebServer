@@ -104,7 +104,7 @@ class Moment(Base):
     aid = Column(ForeignKey(u'activities.aid', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)   #与动态相关的活动编号
     time = Column(String(255))  #动态发布时间
     content = Column(String(255))   #动态内容
-    access = Column(Integer)    #访问权限
+    access = Column(Integer, default=1)    #访问权限
 
     user = relationship(u'User')
     activity = relationship(u'Activity')

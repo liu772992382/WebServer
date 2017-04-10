@@ -189,7 +189,9 @@ def moment_getById(mid):
 
 @app.route('/shanyi/wx/moment/create', methods=['POST'])
 def moment_create():
-    return jsonify(create_moment(**request.form.to_dict()))
+    tmp_moment = request.form.to_dict()
+    tmp_moment['uid'] = get_uid(tmp_moment['openId'])['data']
+    return jsonify(create_moment(**tmp_moment))
 
 @app.route('/shanyi/wx/moment/delete/<int:mid>', methods=['GET'])
 def moment_delete(mid):
@@ -227,7 +229,7 @@ def moment_comments(mid):
 def moment_add_image():
     tmp_mid = request.form.get('mid')
     tmp_md5 = request.form.get('md5')
-    return jsonify(add_image())
+    return jsonify(add_image(tmp_mid, tmp_md5))
 
 @app.route('/shanyi/wx/moment/images/<int:mid>', methods = ['GET'])
 def moment_get_images(mid):
