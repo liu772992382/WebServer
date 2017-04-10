@@ -229,6 +229,8 @@ def moment_comments(mid):
 def moment_add_image():
     tmp_mid = request.form.get('mid')
     tmp_md5 = request.form.get('md5')
+    if 'http://' not in tmp_md5:
+        tmp_md5 = 'http://oo4l2ezdu.bkt.clouddn.com/' + tmp_md5
     return jsonify(add_image(tmp_mid, tmp_md5))
 
 @app.route('/shanyi/wx/moment/images/<int:mid>', methods = ['GET'])
