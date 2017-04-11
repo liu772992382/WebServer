@@ -19,7 +19,7 @@ def get_moment(*args):
 def get_all_moment():
     tmp = {'status':False, 'data':[]}
     try:
-        moments = session.query(Moment).all()
+        moments = session.query(Moment).order_by(Moment.mid.desc()).all()
         for i in moments:
             tmp['data'].append(i.get_dict())
         tmp['status'] = True
@@ -149,7 +149,7 @@ def create_comment(mid, uid, content):
 
 def get_comments(mid):
     tmp = {'status':False, 'data':[]}
-    tmp_comments = session.query(MomentComment).filter_by(mid=mid).all()
+    tmp_comments = session.query(MomentComment).filter_by(mid=mid).order_by(MomentComment.cmid.desc()).all()
     if tmp_comments != []:
         for i in tmp_comments:
             tmp['data'].append(i.get_dict())

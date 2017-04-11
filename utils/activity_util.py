@@ -33,7 +33,7 @@ def create_activity(**kwargs):
 
 def get_all_activities():
     tmp = {'status':False, 'data':[]}
-    tmp_activities = session.query(Activity).all()
+    tmp_activities = session.query(Activity).order_by(Activity.aid.desc()).all()
     if tmp_activities != []:
         for i in tmp_activities:
             tmp['data'].append(i.get_dict())
@@ -122,7 +122,7 @@ def delete_participant(uid, aid):
 
 def get_participants(aid):
     tmp = {'status':False, 'data':[]}
-    tmp_participants = session.query(Participant).filter_by(aid=aid).all()
+    tmp_participants = session.query(Participant).filter_by(aid=aid).order_by(Participant.pid.desc()).all()
     if tmp_participants != []:
         for i in tmp_participants:
             tmp['data'].append(i.get_dict())
