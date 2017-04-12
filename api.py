@@ -164,6 +164,18 @@ def activity_myrecently(openId):
 
 
 #--------------------动态接口---------------------
+@app.route('/shanyi/wx/moment/owner_get/<string:openId>', methods=['GET'])
+def moment_owner_get(openId):
+    tmp_uid = get_uid(openId)['data']
+    tmp_moments = owner_get(tmp_uid)
+    # print tmp_moments
+    tmp_moments['userInfo'] = session.query(User).filter_by(uid=tmp_uid).first().get_dict()
+    for i in tmp_moments['data']:
+        i['images'] = get_images(i['mid'])['data']
+        i['likeAmount'] = len(get_likes(i['mid'])['data'])
+        i['commentAmount'] = len(get_comments(i['mid'])['data'])
+    return jsonify(tmp_moments)
+
 
 @app.route('/shanyi/wx/moment/get_all', methods=['GET'])
 def moment_getAll():

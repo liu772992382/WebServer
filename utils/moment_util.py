@@ -5,6 +5,18 @@ import sys
 sys.path.append("..")
 from model import *
 
+def owner_get(uid):
+    tmp = {'status':False, 'data':[]}
+    try:
+        moments = session.query(Moment).filter_by(uid=uid).order_by(Moment.mid.desc()).all()
+        for i in moments:
+            tmp['data'].append(i.get_dict())
+        tmp['status'] = True
+    except:
+        pass
+    finally:
+        return tmp
+
 def get_moment(*args):
     tmp = {'status':False, 'data':[]}
     try:
