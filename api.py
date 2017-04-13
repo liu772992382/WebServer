@@ -180,6 +180,18 @@ def moment_owner_get(openId):
 @app.route('/shanyi/wx/moment/get_all', methods=['GET'])
 def moment_getAll():
     tmp_moments = get_all_moment()
+    print tmp_moments
+    for i in tmp_moments['data']:
+        i['userInfo'] = session.query(User).filter_by(uid=i['uid']).first().get_dict()
+        i['images'] = get_images(i['mid'])['data']
+        i['likeAmount'] = len(get_likes(i['mid'])['data'])
+        i['commentAmount'] = len(get_comments(i['mid'])['data'])
+    return jsonify(tmp_moments)
+
+@app.route('/shanyi/wx/moment/get_more/<int:offset>', methods=['GET'])
+def moment_getMore(offset):
+    tmp_moments = get_all_moment(offset=offset)
+    print tmp_moments
     for i in tmp_moments['data']:
         i['userInfo'] = session.query(User).filter_by(uid=i['uid']).first().get_dict()
         i['images'] = get_images(i['mid'])['data']

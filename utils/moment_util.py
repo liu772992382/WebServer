@@ -28,15 +28,15 @@ def get_moment(*args):
     finally:
         return tmp
 
-def get_all_moment():
+def get_all_moment(num=4, offset = 0):
     tmp = {'status':False, 'data':[]}
     try:
-        moments = session.query(Moment).order_by(Moment.mid.desc()).all()
+        moments = session.query(Moment).order_by(Moment.mid.desc()).limit(num).offset(offset).all()
         for i in moments:
             tmp['data'].append(i.get_dict())
         tmp['status'] = True
-    except:
-        pass
+    except Exception, e:
+        print Exception, e
     finally:
         return tmp
 
