@@ -266,4 +266,4 @@ def moment_get_images(mid):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=HOST_PORT)
+    app.run(debug=True, port=HOST_PORT, host='0.0.0.0')
