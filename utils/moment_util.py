@@ -57,6 +57,26 @@ def create_moment(**kwargs):#返回数据存在bug
         print Exception, e
         return tmp
 
+def search_moment(sdata):
+    tmp = {'status': False, 'data': []}
+    try:
+        tmp_moments = session.query(Moment).filter(Moment.content.like('%'+sdata+'%')).order_by(Moment.mid.desc()).all()
+        for i in tmp_moments:
+            tmp['data'].append(i.get_dict())
+        tmp_users = session.query(User).filter(User.nickName.like('%'+sdata+'%')).all()
+        for i in tmp_users:
+            tmp_moments = session.query(Moment).filter(Moment.uid==i.uid).order_by(Moment.mid.desc()).all()
+            for j in tmp_moments:
+                tmp['data'].append(j.get_dict())
+        tmp['status'] = True
+        return tmp
+    except:
+        return tmp
+
+
+
+
+
 # def update_moment(**kwargs):
 #     tmp = {'status':False}
 #     tmp_moment = session.query(Moment).filter_by(mid=kwargs['mid']).first()

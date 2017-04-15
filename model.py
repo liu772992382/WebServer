@@ -1,6 +1,6 @@
 # coding: utf-8
 from sqlalchemy import Column, Date, DateTime, ForeignKey, Index, Integer, SmallInteger, String, Table, Text, \
-                       text, create_engine
+                       text, create_engine, and_, or_
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from flask import Flask
@@ -49,7 +49,7 @@ class Activity(Base):
     name = Column(String(255))  #活动名
     organizer = Column(ForeignKey(u'users.uid', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)  #活动组织者
     time = Column(String(255))  #活动时间
-    content = Column(String(255))   #活动内容
+    content = Column(String(5000))   #活动内容
     summary = Column(String(255))   #活动概要
     createTime = Column(String(255))    #活动创建时间
     cover = Column(String(255)) #封面图片的文件名
@@ -164,6 +164,8 @@ class Corporation(Base):
     __tablename__ = 'corporation'
 
     cid = Column(Integer, primary_key=True)
+    # userName = Column(String(255))
+    # passWord = Column(String(255))
     uid = Column(ForeignKey(u'users.uid', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)    #团队用户编号
     slogan = Column(String(255))    #团队口号
     intro = Column(String(255)) #团队介绍

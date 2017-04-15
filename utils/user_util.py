@@ -140,6 +140,10 @@ def get_all_corporation():
     except:
         return tmp
 
+def create_corporation(corp_data):
+    tmp = {'status': False}
+
+
 # def get_corp_likes(uid):
 #     tmp = {'status':False}
 #     try:
