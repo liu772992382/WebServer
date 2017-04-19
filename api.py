@@ -16,6 +16,7 @@ from utils.user_util import *
 from utils.activity_util import *
 from werkzeug import secure_filename
 from test_qiniu import *
+import random
 
 
 app = Flask(__name__)
@@ -125,6 +126,35 @@ def activity_get(aid):
 @app.route('/shanyi/wx/activity/create', methods = ['POST'])
 def activity_create():
     return jsonify(create_activity(**request.form.to_dict()))
+
+@app.route('/shanyi/wx/activity/weburl/<string:openId>', methods = ['GET'])
+def weburl(openId):
+    tmp_user = session.query(User).filter(User.openId==openId).first()
+    if tmp_user:
+        tmp_acts = session.query(Activity).filter(Activity.organizer==tmp_user.uid).all()
+        actData = []
+        for i in tmp_acts:
+            actData.append(i.get_dict())
+        return render_template('Adminuser.html', userInfo = tmp_user.get_dict(), actData = actData)
+    else:
+        return jsonify({'status': False, 'info': 'no such user'})
+
+@app.route('/shanyi/wx/activity/create_web', methods = ['POST'])
+def activity_create_web():
+    image = request.files['file']
+    if image and allowed_file(image.filename):
+        filename=secure_filename(image.filename)
+        image.save(os.path.join('./',filename))
+        key = str(random.randrange(100,1000000))+filename
+        token = q.upload_token(bucket_name, key, 3600)
+        ret, info = put_file(token, key, './'+filename)
+        tmp = request.form.to_dict()
+        tmp['cover'] = QINIUURL + ret.get('key')
+        tmp_info = create_activity(**tmp)
+        tmp_info = '发布成功' if tmp_info['status'] else '发布失败'
+        return tmp_info
+    else:
+        return jsonify({'status': False, 'info': 'invalid file'})
 
 @app.route('/shanyi/wx/activity/update', methods = ['POST'])
 def activity_update():

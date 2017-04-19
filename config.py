@@ -14,4 +14,6 @@ ADMIN_PASSWORD = 'ShanyiAdmin'
 UPLOAD_FOLDER = 'images/upload'
 HOST_PORT = 8081
 
+QINIUURL = 'http://oo4l2ezdu.bkt.clouddn.com/'
+
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])

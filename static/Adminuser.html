@@ -1,0 +1,284 @@
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/templates/styles/simditor.css"/>
+		<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.css"rel="stylesheet">
+		<link href="http://www.jq22.com/jquery/font-awesome.4.6.0.css"
+		rel="stylesheet">
+		<link rel="stylesheet" type="text/css" media="all" href="/templates/styles/daterangepicker-bs3.css"
+		/>
+		<script type="text/javascript" src="/templates/scripts/jquery.min.js">
+		</script>
+		<script type="text/javascript" src="/templates/scripts/bootstrap.min.js">
+		</script>
+		<script type="text/javascript" src="/templates/scripts/moment.js">
+		</script>
+		<script type="text/javascript" src="/templates/scripts/daterangepicker.js">
+		</script>
+<script type="text/javascript" src="/templates/scripts/module.min.js"></script>
+<script type="text/javascript" src="/templates/scripts/hotkeys.min.js"></script>
+<script type="text/javascript" src="/templates/scripts/uploader.min.js"></script>
+<script type="text/javascript" src="/templates/scripts/simditor.min.js"></script>
+<link media="all" rel="stylesheet" type="text/css" href="/templates/bootstrap/styles/bootstrap.css" />
+
+
+<script type="text/javascript" src="/templates/list.js"></script>
+
+</head>
+<script>
+    $(document).ready(function(){
+    $('#editBtn').hide();
+    $('#titlePre').hide();
+    //初始化文本编辑器
+    window.editor = new Simditor({
+        //textarea的id
+        textarea: $('#editor'),
+
+        //工具条都包含哪些内容
+        toolbar:[
+            'title',
+            'bold',
+            'italic',
+            'underline',
+            'strikethrough',
+            'fontScale',
+            'color',
+            'ol'    ,
+            'ul'     ,
+            'blockquote',
+            'code',
+            'table',
+            'link',
+            'image',
+            'hr',
+            'indent',
+            'outdent',
+            'alignment'
+            ],
+        // 若需要上传功能，上传的参数设置。
+        upload : {
+                url : '', //文件上传的接口地址
+                params: null, //键值对,指定文件上传接口的额外参数,上传的时候随文件一起提交
+                fileKey: 'upload', //服务器端获取文件数据的参数名
+                pasteImage: true,
+                connectionCount: 3,
+                leaveConfirm: '正在上传文件'
+         },
+        success: function(data) {
+            log(data);
+        }
+    });
+
+});
+
+
+
+
+</script>
+<style>
+    .bannerA{
+
+        margin: 5px;
+        color: #333;
+    }
+    .bannerA:hover{
+        text-decoration:none;
+        color: #999
+    }
+.img{
+    width: 360px;
+    height: 120px
+}
+.chooseImg{
+    width: 360px;
+    float: left;
+    text-align: center;
+    border: 1px solid #f1f1f1;
+    border-top: none;
+    background-color: #f1f1f1;
+    padding: 5px 0;
+    color: #666;
+}
+a:hover{
+    text-decoration: none;
+    color: #333;
+}
+i{
+        content: "\f1f8";
+        width: 20px;
+}
+    </style>
+<body>
+    <div style="width: 100%;border-bottom: 1px solid #f1f1f1;float: right; padding: 5px  0 5px 70%">
+
+
+
+    <div class="userOut">
+        <a  class="in" onclick="window.open('in.html','_blank','height=400, width=600, top=200px,left=400px');">登录</a>
+    </div>
+
+
+    <div class="userIn"><img src="" style="width: 50px; height: 50px; border-radius: 50%;"/>
+    <a class="bannerA" style="font-weight: 700">data.user.name;</a>
+    <a class="bannerA">社团管理</a>
+    <a class="bannerA">注销</a>
+    </div>
+</div>
+    <div class="container">
+
+           <div class="row">
+                 <div class="col-md-3">
+                     <br />
+                     <br />
+                     <br />
+
+                      <div id="actHis" class="list-group">
+</div>   </div>
+  <div class="col-md-9">
+      <!--<form  action="ArticleSave.action" method="post">-->
+          <form method="post" action="http://localhost:8081/shanyi/wx/activity/create_web" enctype="multipart/form-data">
+        <div class="wrapper mainEditor">
+
+            <br />
+           <br /><br />
+           <h2 id="titlePre">
+           </h2>
+           <h4 id="timePre">
+           </h4>
+           <h5 id="summaryPre">
+           </h5>
+           <h6 id="locationPre">
+           </h6>
+           <div id="preview">
+           </div>
+           <input type="hidden" name="organizer" value="{{uid}}" />
+
+            <br />
+            </div>
+
+
+
+            <!--<input id="titleTime" type="text" class="form-control" name="time" placeholder="这里输入活动时间...">-->
+             <br />
+
+
+<div class="row">
+    <div class="col-md-6">
+              <div id="previews" style="height:120px;width:360px;display:block;border:1px solid #f1f1f1"></div>
+  <a href="javascript:;" class="chooseImg" style="background-color:fff;float:left;"><input type="file" onchange="previewimg(this)" style="opacity:0;position:absolute;" name="file">选择封面图片</a>
+ <script type="text/javascript">
+ function previewimg(file)
+ {
+ var prevDiv = document.getElementById('previews');
+ if (file.files && file.files[0])
+ {
+ var reader = new FileReader();
+ photoExt=file.value.substr(file.value.lastIndexOf(".")).toLowerCase();//获得文件后缀名
+    if(photoExt!=".jpg"&&photoExt!='.png'){
+        alert("图片格式不正确");
+        return false;
+    }
+ reader.onload = function(evt){
+
+ prevDiv.innerHTML = '<img class="img" src="' + evt.target.result + '" />';
+}
+ reader.readAsDataURL(file.files[0]);
+}
+ else
+ {
+ prevDiv.innerHTML = '<div class="img" style="filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src=\'' + file.value + '\'"></div>';
+ }
+ }
+ </script>
+
+    </div>
+
+
+             <!--<input id="titleCover" type="text" class="form-control" name="cover" placeholder="这里输入活动封面链接...">
+              <br />
+                <input id="titleSummary" type="text" class="form-control" name="summary" placeholder="这里输入活动概要...">
+               <br />
+               -->
+                <div class="col-md-6">
+
+             <input id="titleHead" type="text" class="form-control" name="name" placeholder="这里输入活动名称...">
+
+               <br />
+
+               <input id="titleLocation" type="text" class="form-control" name="location" placeholder="这里输入活动地址..">
+       <br />
+
+			 <input type="text" name="time" placeholder="这里输入活动时间" class="form-control">
+               <!-- <div id="reportrange2" class="btn" style="text-align:left; display: inline-block; background: #fff; cursor: pointer; width:100%; border: 1px solid #ccc">
+                  <a style="color:#777;">选择活动时间：</a> -->
+									<!-- <i class="glyphicon glyphicon-calendar fa fa-calendar" style="margin-left:25px"></i>
+                  <span></span>
+									<input hidden="true" name="time" />
+									<b class="caret"></b> -->
+               <!-- </div> -->
+<!--
+               <script type="text/javascript">
+               $(document).ready(function() {
+                  $('#reportrange2 span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+									$('#reportrange2 input').value(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+									$('#reportrange2').daterangepicker();
+               });
+               </script> -->
+
+<br /></div>
+ </div>
+                <br />
+           <div id="view">
+
+            <textarea id="editor" name="content" placeholder="请这里编辑活动内容…" autofocus></textarea>
+           </div>
+            <br />
+            <button type="submit" class="btn btn-default " style="padding: 10px 60px;" >发布</button>
+            <input id="preBtn" type="button" class="btn btn-default " value="预览" style="padding: 10px 60px;" onclick="preview()"></input>
+            <input id="editBtn" type="button" class="btn btn-default " value="编辑" style="padding: 10px 60px;display: none" onclick="backEdit()"></input>
+
+            <br />
+            <br />
+            <div class="alert alert-warning" role="alert">输入标题及内容，并对内容进行编辑。也可插入代码和上传本地图片 然后点击发布。</div>
+        </div>
+    </form></div>
+
+
+    </div>
+</div>
+<script>
+function preview(){
+    //alert("a");
+
+    //alert("B");
+    $('#preview')[0].innerHTML=editor.textarea[0].value;
+    //alert(editor.body[0].innerText);
+    $('#titlePre')[0].innerHTML=$('#titleHead')[0].value;
+    $('#timePre')[0].innerHTML=$('#titleTime')[0].value;
+    $('#summaryPre')[0].innerHTML=$('#titleSummary')[0].value;
+    $('#locationPre')[0].innerHTML=$('#titleLocation')[0].value;
+
+    $('#editor').hide();
+    $('#view').hide();
+    $('#titleHead').hide();
+    $('#preBtn').hide();
+    $('#editBtn').show();
+    $('#titlePre').show();
+    $('#preview').show();
+
+
+}
+function backEdit(){
+    $('#view').show();
+    $('#preBtn').show();
+    $('#titleHead').show();
+    $('#titlePre').hide();
+    $('#preview').hide();
+    $('#editBtn').hide();
+
+}
+
+</script>
+</body>
+</html>
