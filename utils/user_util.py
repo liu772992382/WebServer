@@ -19,12 +19,12 @@ def get_user(*args):
     tmp = {'status':False, 'data':[]}
     try:
         for i in args:
-            print i
+            # print i
             tmp['data'].append(session.query(User).filter_by(openId=i).first().get_dict())
         tmp['status'] = True
         return tmp
     except Exception, e:
-        print Exception, e
+        logging.info(Exception, e)
         tmp['info'] = 'No such user'
         return tmp
 
@@ -71,7 +71,7 @@ def create_user(**kwargs):
 
 def update_user(**kwargs):
     tmp = {'status':False}
-    print kwargs['openId']
+    # print kwargs['openId']
     if if_user_exist(kwargs['openId'])['status']:
         tmp_user = session.query(User).filter_by(openId=kwargs['openId']).first()
         try:
@@ -120,12 +120,12 @@ def get_corporation(*args):
     tmp = {'status':False, 'data':[]}
     try:
         for i in args:
-            print i
+            # print i
             tmp['data'].append(session.query(Corporation).filter_by(uid=i).first().get_dict())
         tmp['status'] = True
         return tmp
     except Exception, e:
-        print Exception, e
+        logging.info(Exception, e)
         tmp['info'] = 'No such Corporation'
         return tmp
 

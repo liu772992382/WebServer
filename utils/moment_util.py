@@ -36,7 +36,7 @@ def get_all_moment(num=4, offset = 0):
             tmp['data'].append(i.get_dict())
         tmp['status'] = True
     except Exception, e:
-        print Exception, e
+        logging.info(Exception, e)
     finally:
         return tmp
 
@@ -54,7 +54,7 @@ def create_moment(**kwargs):#返回数据存在bug
         tmp['status'] = True
         return tmp
     except Exception, e:
-        print Exception, e
+        logging.info(Exception, e)
         return tmp
 
 def search_moment(sdata):
@@ -126,7 +126,7 @@ def get_likes(mid):
         tmp['status'] = True
         return tmp
     except Exception, e:
-        print Exception, e
+        logging.info(Exception, e)
         return tmp
 
 

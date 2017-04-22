@@ -23,12 +23,12 @@ def create_activity(**kwargs):
     try:
         session.add(tmp_activity)
         session.commit()
-        print tmp_activity.aid
+        # print tmp_activity.aid
         tmp['status'] = True
         tmp['data'] = tmp_activity.aid
         return tmp
     except Exception, e:
-        print Exception, e
+        logging.info(Exception, e)
         return tmp
 
 def get_all_activities():

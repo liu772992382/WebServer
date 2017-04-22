@@ -59,7 +59,7 @@ def uptoken():
     tmp_token = {}
     for i in keys:
         tmp_token[keys[i]] = q.upload_token(bucket_name, keys[i][9:], 7200)
-    print tmp_token
+    # print tmp_token
     return jsonify(tmp_token)
 
 
@@ -172,7 +172,7 @@ def activity_participant_get(aid):
 def activity_participant_add():
     req_aid = request.form.get('aid')
     req_uid = session.query(User).filter_by(openId=request.form.get('openId')).first().uid
-    print req_aid, req_uid
+    # print req_aid, req_uid
     return jsonify(add_participant(req_uid, req_aid))
 
 @app.route('/shanyi/wx/activity/participant/delete', methods = ['POST'])
@@ -183,7 +183,7 @@ def activity_participant_delete():
 
 @app.route('/shanyi/wx/activity/myrecently/<string:openId>', methods = ['GET'])
 def activity_myrecently(openId):
-    print openId
+    # print openId
     tmp = {'status': True, 'data': ''}
     tmp_uid = get_uid(openId)['data']
     tmp_acts = session.query(Participant).filter_by(uid=tmp_uid).all()
@@ -279,7 +279,7 @@ def moment_cancel_like():
 
 @app.route('/shanyi/wx/moment/create_comment', methods = ['POST'])
 def moment_create_comment():
-    print request.form.get('openId')
+    # print request.form.get('openId')
     req_uid = session.query(User).filter_by(openId=request.form.get('openId')).first().uid
     req_mid = request.form.get('mid')
     req_content = request.form.get('content')

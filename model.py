@@ -7,6 +7,7 @@ from flask import Flask
 from config import *
 import sys, os
 import time
+import logging
 
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
 Session = sessionmaker()
