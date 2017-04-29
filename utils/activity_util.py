@@ -14,7 +14,7 @@ def get_activity(args):
         tmp['status'] = True
         return tmp
     except Exception, e:
-        print Exception, e
+        # print Exception, e
         return tmp
 
 def create_activity(**kwargs):

@@ -121,7 +121,7 @@ def activity_get_all():
 def activity_get(aid):
     tmp_activity = get_activity(aid)
     if tmp_activity['status']:
-        print tmp_activity
+        # print tmp_activity
         tmp_uid = tmp_activity.get('data')['organizer']
         tmp_activity.get('data')['organizerInfo'] = session.query(Corporation).filter_by(uid=tmp_uid).first().get_dict()
         return jsonify(tmp_activity)
