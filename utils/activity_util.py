@@ -5,14 +5,16 @@ import sys
 sys.path.append("..")
 from model import *
 
-def get_activity(*args):
-    tmp = {'status':False, 'data':[]}
+def get_activity(args):
+    tmp = {'status':False}
+
     try:
-        for i in args:
-            tmp['data'].append(session.query(Activity).filter_by(aid=i).first().get_dict())
+        # for i in args:
+        tmp['data'] = copy.deepcopy(session.query(Activity).filter_by(aid=args).first().get_dict())
         tmp['status'] = True
         return tmp
-    except:
+    except Exception, e:
+        print Exception, e
         return tmp
 
 def create_activity(**kwargs):
@@ -130,6 +132,64 @@ def get_participants(aid):
         return tmp
     else:
         tmp['info'] = 'no participants'
+        return tmp
+
+
+def activity_get_like_status(aid, uid):
+    tmp = {'status':False}
+    tmp_like = session.query(ActivityLike).filter_by(aid=aid).filter_by(uid=uid).first()
+    if tmp_like !=None:
+        tmp['status'] = True
+        tmp['data'] = tmp_like
+        return tmp
+    else:
+        return tmp
+
+def activity_get_likes(aid):
+    tmp = {'status':False, 'data':[]}
+    tmp_likes = session.query(ActivityLike).filter_by(aid=aid).all()
+    try:
+        for i in tmp_likes:
+            tmp['data'].append(i.uid)
+        tmp['status'] = True
+        return tmp
+    except Exception, e:
+        logging.info(Exception, e)
+        return tmp
+
+
+def like_activity(aid, uid):
+    tmp = {'status':False}
+    if not activity_get_like_status(aid, uid)['status']:
+        alike = ActivityLike()
+        alike.aid = aid
+        alike.uid = uid
+        alike.time = get_time()
+        try:
+            session.add(alike)
+            session.commit()
+            tmp['status'] = True
+            return tmp
+        except:
+            return tmp
+    else:
+        tmp['info'] = '你已经赞过这条活动'
+        return tmp
+
+
+def activity_cancel_like(aid, uid):
+    tmp = {'status':False}
+    tmp_like = activity_get_like_status(aid, uid)
+    if tmp_like['status']:
+        try:
+            session.delete(tmp_like['data'])
+            session.commit()
+            tmp['status'] = True
+            return tmp
+        except:
+            return tmp
+    else:
+        tmp['info'] = 'no such like'
         return tmp
 
 

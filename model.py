@@ -8,6 +8,7 @@ from config import *
 import sys, os
 import time
 import logging
+import copy
 
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
 Session = sessionmaker()
@@ -67,6 +68,18 @@ class Activity(Base):
     def get_dict(self):
         self.__dict__.pop('_sa_instance_state')
         return self.__dict__
+
+
+class ActivityLike(Base):
+    __tablename__ = 'activity_like'
+
+    alid = Column(Integer, primary_key=True)    #动态点赞编号
+    aid = Column(ForeignKey(u'activities.aid', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)  #被点赞的动态编号
+    uid = Column(ForeignKey(u'users.uid', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)    #点赞者的用户编号
+    time = Column(String(255))  #点赞时间
+
+    user = relationship(u'User')
+    moment = relationship(u'Activity')
 
 
 class ActivityImage(Base):

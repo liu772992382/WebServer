@@ -113,15 +113,20 @@ def corp_get_all():
 def activity_get_all():
     tmp_activities = get_all_activities()
     for i in tmp_activities['data']:
+        i['likes'] = len(activity_get_likes(i['aid'])['data'])
         i['thumbs'] = len(get_participants(i['aid'])['data'])
     return jsonify(tmp_activities)
 
 @app.route('/shanyi/wx/activity/get/<int:aid>', methods = ['GET'])
 def activity_get(aid):
     tmp_activity = get_activity(aid)
-    tmp_uid = tmp_activity['data'][0]['organizer']
-    tmp_activity['data'][0]['organizerInfo'] = session.query(Corporation).filter_by(uid=tmp_uid).first().get_dict()
-    return jsonify(tmp_activity)
+    if tmp_activity['status']:
+        print tmp_activity
+        tmp_uid = tmp_activity.get('data')['organizer']
+        tmp_activity.get('data')['organizerInfo'] = session.query(Corporation).filter_by(uid=tmp_uid).first().get_dict()
+        return jsonify(tmp_activity)
+    else:
+        return jsonify({'status': False})
 
 @app.route('/shanyi/wx/activity/create', methods = ['POST'])
 def activity_create():
@@ -191,6 +196,22 @@ def activity_myrecently(openId):
         tmp['data'] += session.query(Activity).filter_by(aid=i.aid).first().name
         tmp['data'] += ' '
     return jsonify(tmp)
+
+@app.route('/shanyi/wx/activity/get_likes/<int:aid>', methods=['GET'])
+def activity_getLikes(aid):
+    return jsonify(activity_get_likes(aid))
+
+@app.route('/shanyi/wx/activity/like', methods=['POST'])
+def activity_like():
+    req_aid = request.form.get('aid')
+    req_uid = session.query(User).filter_by(openId=request.form.get('openId')).first().uid
+    return jsonify(like_activity(req_aid, req_uid))
+
+@app.route('/shanyi/wx/activity/cancel_like', methods=['POST'])
+def activity_cancel_like():
+    req_aid = request.form.get('aid')
+    req_uid = request.form.get('uid')
+    return jsonify(activity_cancel_like(req_aid, req_uid))
 
 
 #--------------------动态接口---------------------
