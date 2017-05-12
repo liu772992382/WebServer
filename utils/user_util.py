@@ -137,7 +137,8 @@ def get_all_corporation():
             tmp['data'].append(i.get_dict())
         tmp['status'] = True
         return tmp
-    except:
+    except Exception, e:
+        print Exception, e
         return tmp
 
 def create_corporation(corp_data):

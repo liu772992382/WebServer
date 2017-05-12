@@ -128,6 +128,22 @@ def activity_get(aid):
     else:
         return jsonify({'status': False})
 
+@app.route('/shanyi/wx/activity/get_by_uid/<int:uid>', methods=['GET'])
+def activity_get_by_uid(uid):
+    tmp = {'status':False, 'data': []}
+    try:
+        tmp_list = session.query(Activity).filter(Activity.organizer==uid).all()
+        for i in tmp_list:
+            j = i.get_dict()
+            j['likes'] = len(activity_get_likes(i.aid)['data'])
+            j['thumbs'] = len(get_participants(i.aid)['data'])
+            tmp['data'].append(j)
+        tmp['status'] = True
+        return jsonify(tmp)
+    except Exception, e:
+        print Exception, e
+        return jsonify(tmp)
+
 @app.route('/shanyi/wx/activity/create', methods = ['POST'])
 def activity_create():
     return jsonify(create_activity(**request.form.to_dict()))

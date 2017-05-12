@@ -184,6 +184,7 @@ class Corporation(Base):
     slogan = Column(String(255))    #团队口号
     intro = Column(String(255)) #团队介绍
     name = Column(String(255))  #团队名称
+    tavatar = Column(String(255))   #团队头像
     # thumbs = Column(Integer)    #点赞数量
 
     user = relationship(u'User')
