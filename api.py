@@ -34,7 +34,7 @@ def get_password(username):
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+           filename.rsplit('.', 1)[1].lower in ALLOWED_EXTENSIONS
 
 @auth.error_handler
 def unauthorized():
@@ -132,7 +132,7 @@ def activity_get(aid):
 def activity_get_by_uid(uid):
     tmp = {'status':False, 'data': []}
     try:
-        tmp_list = session.query(Activity).filter(Activity.organizer==uid).all()
+        tmp_list = session.query(Activity).filter(Activity.organizer==uid).order_by(Activity.aid.desc()).all()
         for i in tmp_list:
             j = i.get_dict()
             j['likes'] = len(activity_get_likes(i.aid)['data'])
@@ -170,7 +170,7 @@ def activity_create_web():
         token = q.upload_token(bucket_name, key, 3600)
         ret, info = put_file(token, key, './'+filename)
         tmp = request.form.to_dict()
-        tmp['cover'] = QINIUURL + ret.get('key')
+        tmp['cover'] = QINIUURL + ret.get('key') + '-less'
         tmp_info = create_activity(**tmp)
         tmp_info = '发布成功' if tmp_info['status'] else '发布失败'
         return tmp_info
